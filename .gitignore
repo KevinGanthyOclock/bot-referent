@@ -1,1 +1,32 @@
+# Fichiers de configuration d'environnement
 .env
+
+# Répertoires et fichiers générés par Go
+/bin
+/pkg
+/vendor
+
+# Fichiers de configuration de l'éditeur
+.vscode/
+.idea/
+
+# Fichiers de logs
+*.log
+
+# Fichiers de configuration de Docker
+docker-compose.override.yml
+docker-compose.debug.yml
+
+# Fichiers de configuration de l'IDE
+*.code-workspace
+
+# Fichiers de configuration de l'OS
+.DS_Store
+Thumbs.db
+
+# Fichiers de configuration de l'éditeur
+*.swp
+*.swo
+
+# Fichiers de configuration de l'IDE
+*.iml

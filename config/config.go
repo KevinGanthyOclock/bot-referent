@@ -1,31 +1,35 @@
 package config
 
 import (
-	"log"
-	"os"
+    "log"
+    "os"
 
-	"github.com/joho/godotenv"
+    "github.com/joho/godotenv"
 )
 
-// Config struct contient les configurations du bot discord
 type Config struct {
-	Token string
+    Token string
+    OpenAIToken string
 }
 
-// New retourne une instance de Config
-
 func New() *Config {
-	// Charge les variables d'environnement à partir du fichier .env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+    err := godotenv.Load()
+    if err != nil {
+        log.Fatal("Error loading .env file")
+    }
 
-	token := os.Getenv("DISCORD_BOT_TOKEN")
-	if token == "" {
-		log.Fatal("DISCORD_BOT_TOKEN is not set")
-	}
-	return &Config{
-		Token: token,
-	}
+    token := os.Getenv("DISCORD_BOT_TOKEN")
+    if token == "" {
+        log.Fatal("DISCORD_BOT_TOKEN is not set")
+    }
+
+    openaiToken := os.Getenv("OPENAI_API_KEY")
+    if openaiToken == "" {
+        log.Fatal("OPENAI_API_KEY is not set")
+    }
+
+    return &Config{
+        Token: token,
+        OpenAIToken: openaiToken,
+    }
 }
