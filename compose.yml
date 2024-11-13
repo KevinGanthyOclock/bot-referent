@@ -1,0 +1,84 @@
+services:
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    env_file:
+      - ./bot/.env
+    depends_on:
+      directus:
+        condition: service_started
+
+  database:
+    image: postgres:latest
+    container_name: database-bot
+    volumes:
+      - database-data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - ./sql/.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U directus -d directus"]
+      start_period: 2s
+      interval: 5s
+      timeout: 1s
+      retries: 15
+    networks:
+      - database-network
+
+  directus:
+    image: directus/directus:10.13.1
+    volumes:
+      - ./directus/uploads:/directus/uploads
+    env_file:
+      - ./directus/.env
+    depends_on:
+      cache:
+        condition: service_started
+      database:
+        condition: service_healthy
+    networks:
+      - database-network
+      - reverseproxy-network
+      - cache-network
+
+  cache:
+    image: redis:6
+    networks:
+      - cache-network
+
+  front:
+    build:
+      context: ./front
+      target: dev
+    volumes:
+      - ./front:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - reverseproxy-network
+    depends_on:
+      - directus
+
+  caddy:
+    image: caddy
+    ports:
+      - 80:80
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - directus
+      - front
+    networks:
+      - reverseproxy-network
+
+volumes:
+  database-data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  database-network:
+  reverseproxy-network:
+  cache-network:

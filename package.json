@@ -1,0 +1,21 @@
+{
+    "name": "bot_referent",
+    "version": "1.0.0",
+    "description": "",
+    "main": "",
+    "scripts": {
+      "dev": "docker compose up",
+      "dev:d": "docker compose up -d",
+      "dev:r": "docker compose up --force-recreate",
+      "dev:rd": "docker compose up --force-recreate -d",
+  
+      "down": "docker compose down",
+      "down:v": "docker compose down -v",
+    
+      "backup": "npm run backup:data; npm run backup:schema",
+      "backup:data": "docker exec database-bot pg_dump --clean --if-exists -U directus -d directus > sql/init.sql",
+      "backup:schema": "docker exec database-bot pg_dump --schema-only -U directus -d directus > sql/schema.sql"
+    },
+    "author": "",
+    "license": "ISC"
+  }

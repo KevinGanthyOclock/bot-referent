@@ -1,0 +1,7 @@
+localhost:80 {
+    reverse_proxy http://front:5173
+}
+
+directus.localhost:80 {
+    reverse_proxy http://directus:8055
+}
