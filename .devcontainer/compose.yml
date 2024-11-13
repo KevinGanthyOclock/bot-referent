@@ -6,5 +6,6 @@ services:
       - .:/workspace
       # Copy ssh keys to the container
       - ~/.ssh:/root/.ssh:ro
+      - ~/.gitconfig:/etc/gitconfig
       # Copy docker socket to the container
       - /var/run/docker.sock:/var/run/docker.sock
