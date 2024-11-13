@@ -8,6 +8,8 @@ Planning de développement : https://github.com/KevinGanthyOclock/bot-referent/p
 
 ## Utilisation
 
+> :warning: Penser à créer les fichiers `.env` à partir des fichiers `.env.example`
+
 Au choix :
 
 * Avec **devcontainer**, démarrage automatique
