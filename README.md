@@ -20,7 +20,11 @@ Au choix :
 * `localhost` : Front end (vide)
 * `pb.localhost` : Pockebase
 
-### Pockebase custom endpoints
+### Pockebase
+
+Utiliser le fichier `init.zip` pour restaurer la base de données avec les données de test.
+
+Custom endpoints :
 
 * `pb.localhost/api/generateResponse/:message_id` : Génère une réponse à un message
 * `pb.localhost/api/sendResponse/:message_id` : Envoie la réponse au message en thread sur discord
