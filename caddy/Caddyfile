@@ -5,3 +5,7 @@ localhost:80 {
 directus.localhost:80 {
     reverse_proxy http://directus:8055
 }
+
+pb.localhost:80 {
+    reverse_proxy http://pocketbase:8090
+}

@@ -30,3 +30,8 @@ Thumbs.db
 
 # Fichiers de configuration de l'IDE
 *.iml
+
+pb/*
+!pb/pb_migrations/
+!pb/start.sh
+!pb/Dockerfile
