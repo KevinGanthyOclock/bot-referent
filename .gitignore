@@ -33,5 +33,6 @@ Thumbs.db
 
 pb/*
 !pb/pb_migrations/
+!pb/pb_hooks/
 !pb/start.sh
 !pb/Dockerfile
