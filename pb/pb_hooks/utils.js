@@ -10,10 +10,14 @@ module.exports = {
     },
 
     askToAi: (prompt, question) => {
+        // TODO : SEND TO CHATBOT
+        
         return prompt + "\n\n**Question :**" + question
     },
 
     sendToDiscord: (discord_ref, response) => {
+        // TODO : SEND TO DISCORD
+
         return "Message envoyé à " + discord_ref + " : " + response
     }
 }
