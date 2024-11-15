@@ -1,0 +1,8 @@
+example.com {
+    root * /srv
+        file_server
+}
+
+pb.example.com  {
+    reverse_proxy http://pocketbase:8090
+}

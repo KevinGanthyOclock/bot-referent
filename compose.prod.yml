@@ -1,0 +1,55 @@
+services:
+  pocketbase:
+    build:
+      context: ./pb
+    env_file:
+      - .env
+    volumes:
+      - ./pb/pb_data:/pb/pb_data
+      - ./pb/pb_migrations:/pb/pb_migrations
+      - ./pb/pb_hooks:/pb/pb_hooks
+    networks:
+      - reverseproxy-network
+
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - pocketbase
+
+  # front:
+  #   build:
+  #     context: ./front
+  #     target: dev
+  #   volumes:
+  #     - ./front:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   networks:
+  #     - reverseproxy-network
+  #   depends_on:
+  #     - pocketbase
+
+  caddy:
+    image: caddy
+    ports:
+      - 80:80
+    volumes:
+      - ./caddy/production.Caddyfile:/etc/caddy/Caddyfile
+      - ./front/build:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - front
+      - pocketbase
+    networks:
+      - reverseproxy-network
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  reverseproxy-network:
