@@ -3,10 +3,12 @@ import { render } from "solid-js/web";
 
 import "./index.css";
 import { Route, Router } from "@solidjs/router";
-import Messages from "./pages/Messages";
 import { PbProvider } from "./components/context/PbContext";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
+import MessagesList from "./pages/messages/MessagesList";
+import MessageDetail from "./pages/messages/MessageDetail";
+import NotFound from "./pages/NotFound";
 
 const root = document.getElementById("root");
 
@@ -21,10 +23,13 @@ render(
     <PbProvider>
       <Router>
         <Route path="/" component={Layout}>
-          <Route path="/" component={Messages} />
+          <Route path="/messages" component={MessagesList} />
+          <Route path="/messages/:id" component={MessageDetail} />
         </Route>
 
         <Route path="/login" component={Login} />
+
+        <Route path="*404" component={NotFound} />
       </Router>
     </PbProvider>
   ),
