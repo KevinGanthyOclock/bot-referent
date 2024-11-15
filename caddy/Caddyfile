@@ -1,9 +1,5 @@
 localhost:80 {
-    reverse_proxy http://front:5173
-}
-
-directus.localhost:80 {
-    reverse_proxy http://directus:8055
+    reverse_proxy http://front:3000
 }
 
 pb.localhost:80 {
