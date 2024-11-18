@@ -33,7 +33,7 @@ const MessagesList: Component = () => {
                 {(message, index) => (
                   <tr>
                     <th>{index() + 1}</th>
-                    <td>{message.writer}</td>
+                    <td>{message.metadata.author.username}</td>
                     <td innerHTML={message.question}></td>
                     <td>
                       {message.response_sent ? (
