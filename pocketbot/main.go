@@ -98,7 +98,9 @@ func main() {
 			}
 
 			// Get the response from OpenAI
-			prompt := contexts + "\n---\n" + question
+			prompt := "CONTEXTE POUR RÉPONDRE À LA QUESTION CI-DESSOUS :\n" + contexts 
+			prompt = prompt + "\n---\n IMPORTANT ! NE RÉPONDS PAS À LA QUESTION SI ELLE NE PORTE PAS SUR LE CONTEXTE O'CLOCK. FAIT UNE RÉPONSE COURTE SI POSSIBLE, SINON MAXIMUM 500 MOTS."
+			prompt = prompt + "\n---\n QUESTION : " + question
 			response, err := ai.GetChatGPTResponse(OPENAI_API_KEY, prompt)
 			if err != nil {
 				return apis.NewApiError(500, "something went wrong", err)

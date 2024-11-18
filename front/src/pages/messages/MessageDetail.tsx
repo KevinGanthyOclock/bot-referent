@@ -126,7 +126,7 @@ const MessageDetail: Component = () => {
             <div class="label">
               <span class="badge badge-accent">Apprenant</span>
             </div>
-            {message()?.metadata.author.username}
+            {message()?.metadata.author.username} {message()?.roles.map((r:string) => `[${r}]`).join(" ")}
           </label>
 
           <label class="form-control w-full">

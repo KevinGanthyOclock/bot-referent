@@ -6,6 +6,8 @@ import (
     "encoding/json"
     "io"
     "net/http"
+    "log"
+    "slices"
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
@@ -101,7 +103,9 @@ func GetContexts(app *pocketbase.PocketBase, roles []string) (string, error) {
         return "", err
     }
 
-    return strings.Join(contexts, "<br><br>"), nil
+    slices.Reverse(contexts)
+    log.Println(contexts)
+    return strings.Join(contexts, "\n\n"), nil
 }
 
 
@@ -119,7 +123,7 @@ func getRecursiveContexts(app *pocketbase.PocketBase, contextId string, contexts
     if err != nil {
         return nil, err
     }
-    contexts = append(contexts, context.Get("content").(string))
+    contexts = append(contexts, context.Get("text").(string))
 
     if context.Get("parents") == nil {
         return contexts, nil

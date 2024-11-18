@@ -57,6 +57,4 @@ Le fichier `.env` doit contenir les variables d'environnement suivantes :
 
 * Backend
   * [ ] Avoir un backup format sql de la base de données
-  * [ ] Ajouter une restriction dans le prompt pour que ChatGPT ne réponde que aux question légitimes
-* Frontend
-  * [ ] Afficher les rôles de l'auteur du message
+  * [ ] Récuperer les rôles si MP
