@@ -1,26 +1,26 @@
-// Remplacez par votre clé API OpenAI
 package ai
 
 import (
+    "strings"
     "bytes"
     "encoding/json"
     "io"
     "net/http"
+
+	"github.com/pocketbase/pocketbase"
+	"github.com/pocketbase/pocketbase/apis"
 )
 
-// Structure pour représenter les messages envoyés à l'API
 type Message struct {
     Role    string `json:"role"`
     Content string `json:"content"`
 }
 
-// Structure pour représenter la requête envoyée à l'API
 type ChatGPTRequest struct {
     Model    string    `json:"model"`
     Messages []Message `json:"messages"`
 }
 
-// Structure pour représenter la réponse de l'API
 type ChatGPTResponse struct {
     Choices []struct {
         Message struct {
@@ -30,7 +30,6 @@ type ChatGPTResponse struct {
 }
 
 
-// GetChatGPTResponse envoie un prompt à l'API OpenAI et retourne la réponse
 func GetChatGPTResponse(apiKey, prompt string) (string, error) {
     url := "https://api.openai.com/v1/chat/completions"
 
@@ -79,4 +78,58 @@ func GetChatGPTResponse(apiKey, prompt string) (string, error) {
     }
 
     return chatResponse.Choices[0].Message.Content, nil
+}
+
+
+func GetContexts(app *pocketbase.PocketBase, roles []string) (string, error) {
+    contexts := []string{}
+
+    var contextId string
+    for _, role := range roles {
+        contextId = getPromoContextId(app, role)
+        if contextId != "" {
+            break
+        }
+    }
+    
+    if contextId == "" {
+        return "", apis.NewApiError(404, "Context not found", nil)
+    }
+
+    contexts, err := getRecursiveContexts(app, contextId, contexts)
+    if err != nil {
+        return "", err
+    }
+
+    return strings.Join(contexts, "<br><br>"), nil
+}
+
+
+
+func getPromoContextId(app *pocketbase.PocketBase, promo string) string {
+    context, _ := app.Dao().FindFirstRecordByData("contexts", "title", promo)
+    if context == nil {
+        return ""
+    }
+    return context.Get("id").(string)
+}
+
+func getRecursiveContexts(app *pocketbase.PocketBase, contextId string, contexts []string) ([]string, error) {
+    context, err := app.Dao().FindRecordById("contexts", contextId)
+    if err != nil {
+        return nil, err
+    }
+    contexts = append(contexts, context.Get("content").(string))
+
+    if context.Get("parents") == nil {
+        return contexts, nil
+    }
+    for _, parent := range context.Get("parents").([]string) {
+        contexts, err = getRecursiveContexts(app, parent, contexts)
+        if err != nil {
+            return nil, err
+        }
+    }
+
+    return contexts, nil
 }

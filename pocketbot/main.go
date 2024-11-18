@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+    "encoding/json"
 
 	"github.com/labstack/echo/v5"
 
@@ -11,7 +12,7 @@ import (
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/types"
-	// "github.com/pocketbase/pocketbase/plugins/jsvm"
+	"github.com/pocketbase/pocketbase/plugins/jsvm"
 
 	"pocketbot/ai"
 	"pocketbot/bot"
@@ -33,10 +34,10 @@ func main() {
 	app := pocketbase.New()
 
 	// Activate js hooks
-	// jsvm.MustRegister(app, jsvm.Config{
-	// 	HooksWatch:    true,
-	// 	HooksPoolSize: 25,
-	// })
+	jsvm.MustRegister(app, jsvm.Config{
+		HooksWatch:    true,
+		HooksPoolSize: 25,
+	})
 
 
 	// serves static files from the provided public dir (if exists)
@@ -86,9 +87,17 @@ func main() {
 				return apis.NewBadRequestError("question must be a string", nil)
 			}
 
-			// TODO : get contexts from database
-			contexts := ""
+			// Get the roles of the user to extract contexts
+			var roles []string
+			if err := json.Unmarshal(message.Get("roles").(types.JsonRaw) , &roles); err != nil {
+				return apis.NewApiError(500, "Erreur lors de l'analyse des rôles", nil)
+			}
+			contexts, err := ai.GetContexts(app, roles)
+			if err != nil {
+				return apis.NewApiError(500, "Erreur de récupération des contexts à partir de la promo", err)
+			}
 
+			// Get the response from OpenAI
 			prompt := contexts + "\n---\n" + question
 			response, err := ai.GetChatGPTResponse(OPENAI_API_KEY, prompt)
 			if err != nil {
