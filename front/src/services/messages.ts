@@ -21,6 +21,7 @@ export const getAllMessages = async (pb: PocketBase) => {
 export const getOneMessage = async (args: GetOneMessageArgs) => {
   try {
     const result = await args.pb.collection("messages").getOne(args.id);
+
     return result;
   } catch (e) {
     toast.error("Erreur de récupération des messages");
