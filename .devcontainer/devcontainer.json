@@ -19,5 +19,5 @@
 
 	"forwardPorts": [80],
 	"remoteUser": "root",
-	"postCreateCommand": "git config --global --add safe.directory /workspace; chown root:root /root/.ssh/*"
+	"postCreateCommand": "git config --global --add safe.directory /workspace;"
 }

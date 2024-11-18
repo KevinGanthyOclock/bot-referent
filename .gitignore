@@ -31,8 +31,4 @@ Thumbs.db
 # Fichiers de configuration de l'IDE
 *.iml
 
-pb/*
-!pb/pb_migrations/
-!pb/pb_hooks/
-!pb/start.sh
-!pb/Dockerfile
+pocketbot/pb_data

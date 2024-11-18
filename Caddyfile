@@ -3,5 +3,5 @@ localhost:80 {
 }
 
 pb.localhost:80 {
-    reverse_proxy http://pocketbase:8090
+    reverse_proxy http://pocketbot:8090
 }

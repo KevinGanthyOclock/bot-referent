@@ -1,12 +1,16 @@
-FROM node:20-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+FROM node:20-alpine AS base
 
+FROM base AS deps
 WORKDIR /usr/src/app
+COPY ./package*.json ./
+RUN npm i
 
-COPY . .
+FROM base AS dev
+WORKDIR /usr/src/app
+COPY --from=deps /usr/src/app/node_modules /usr/src/app/node_modules
+CMD npm run dev
 
-RUN pnpm install
-
-CMD ["pnpm", "dev", "--host"]
+FROM base
+WORKDIR /usr/src/app
+COPY --from=deps /usr/src/app/node_modules /usr/src/app/node_modules
+ADD . .
