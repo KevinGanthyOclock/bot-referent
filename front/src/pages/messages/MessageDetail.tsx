@@ -109,7 +109,8 @@ const MessageDetail: Component = () => {
       const result = await pb
         .collection("messages")
         .update(message()?.id || "", { ...message(), response: value });
-      if (!result.ok) {
+      console.log(result);
+      if (!result) {
         throw Error("Erreur de mise à jour de la réponse");
       }
       toast.success("Réponse mise à jour avec succès");
@@ -126,7 +127,11 @@ const MessageDetail: Component = () => {
             <div class="label">
               <span class="badge badge-accent">Apprenant</span>
             </div>
-            {message()?.metadata.author.username} {message()?.roles.map((r:string) => `[${r}]`).join(" ")}
+            {message()?.metadata.author.username}{" "}
+            {message()?.roles &&
+              message()
+                ?.roles.map((r: string) => `[${r}]`)
+                .join(" ")}
           </label>
 
           <label class="form-control w-full">
