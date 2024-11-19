@@ -4,13 +4,12 @@ ENV POCKET_PORT=8090
 
 WORKDIR /pb
 
-COPY go.mod .
-COPY go.sum .
-
-RUN go mod tidy
+# Add sqlite3 to execute dump on demand
+RUN apk update && apk upgrade
+RUN apk add --no-cache sqlite
 
 RUN touch init.sql
 
 EXPOSE ${POCKET_PORT}
 
-CMD go run main.go serve --http=${POCKET_URL}:${POCKET_PORT}
+CMD go mod tidy; go run main.go serve --http=${POCKET_URL}:${POCKET_PORT}
